@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+      
+    <modelVersion>4.0.0</modelVersion>
+      
+    <parent>
+            
+        <groupId>wso2.sampleHelloWorldDocker</groupId>
+            
+        <artifactId>HelloDocker</artifactId>
+            
+        <version>1.0.0-SNAPSHOT</version>
+          
+    </parent>
+      
+    <groupId>wso2.sampleHelloWorldDocker</groupId>
+      
+    <artifactId>HelloDockerDockerExporter</artifactId>
+      
+    <version>1.0.0-SNAPSHOT</version>
+      
+    <name>HelloDockerDockerExporter</name>
+      
+    <description>HelloDockerDockerExporter</description>
+      
+    <properties>
+            
+        <keystore.type>JKS</keystore.type>
+            
+        <keystore.name>wso2carbon.jks</keystore.name>
+            
+        <keystore.password>wso2carbon</keystore.password>
+            
+        <keystore.alias>wso2carbon</keystore.alias>
+            
+        <ciphertool.enable>false</ciphertool.enable>
+            
+        <artifact.types>jaggery/app=zip,synapse/priority-executor=xml,synapse/inbound-endpoint=xml,service/rule=aar,synapse/message-store=xml,event/stream=json,service/meta=xml,datasource/datasource=xml,synapse/proxy-service=xml,bpel/workflow=zip,synapse/sequence=xml,synapse/endpointTemplate=xml,carbon/application=car,wso2/gadget=dar,synapse/api=xml,synapse/event-source=xml,synapse/message-processors=xml,event/receiver=xml,lib/dataservice/validator=jar,synapse/template=xml,synapse/endpoint=xml,lib/carbon/ui=jar,lib/synapse/mediator=jar,synapse/metadata=yaml,event/publisher=xml,synapse/local-entry=xml,synapse/task=xml,webapp/jaxws=war,registry/resource=zip,synapse/configuration=xml,service/axis2=aar,synapse/lib=zip,synapse/sequenceTemplate=xml,event/execution-plan=siddhiql,service/dataservice=dbs,web/application=war,lib/library/bundle=jar</artifact.types>
+            
+        <dockerfile.base.image>docker.wso2.com/wso2mi:4.2.0</dockerfile.base.image>
+            
+        <dockerfile.repository>yaminiy/helloDocker2</dockerfile.repository>
+            
+        <dockerfile.tag>${project.version}</dockerfile.tag>
+          
+    </properties>
+      
+    <dependencies>
+            
+        <dependency>
+                  
+            <groupId>wso2.sampleHelloWorldDocker</groupId>
+                  
+            <artifactId>HelloDockerCompositeExporter</artifactId>
+                  
+            <version>1.0.0-SNAPSHOT</version>
+                  
+            <type>car</type>
+                
+        </dependency>
+          
+    </dependencies>
+      
+    <repositories>
+            
+        <repository>
+                  
+            <releases>
+                        
+                <enabled>true</enabled>
+                        
+                <updatePolicy>daily</updatePolicy>
+                        
+                <checksumPolicy>ignore</checksumPolicy>
+                      
+            </releases>
+                  
+            <id>wso2-nexus</id>
+                  
+            <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+                
+        </repository>
+          
+    </repositories>
+      
+    <pluginRepositories>
+            
+        <pluginRepository>
+                  
+            <releases>
+                        
+                <enabled>true</enabled>
+                        
+                <updatePolicy>daily</updatePolicy>
+                        
+                <checksumPolicy>ignore</checksumPolicy>
+                      
+            </releases>
+                  
+            <id>wso2-nexus</id>
+                  
+            <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+                
+        </pluginRepository>
+          
+    </pluginRepositories>
+      
+    <build>
+            
+        <plugins>
+                  
+            <plugin>
+                        
+                <artifactId>maven-eclipse-plugin</artifactId>
+                        
+                <version>2.9</version>
+                        
+                <configuration>
+                              
+                    <buildcommands/>
+                              
+                    <projectnatures>
+                                    
+                        <projectnature>org.wso2.developerstudio.eclipse.docker.distribution.project.nature</projectnature>
+                                  
+                    </projectnatures>
+                            
+                </configuration>
+                      
+            </plugin>
+                  
+            <plugin>
+                        
+                <artifactId>maven-compiler-plugin</artifactId>
+                        
+                <version>3.10.1</version>
+                        
+                <configuration/>
+                      
+            </plugin>
+                  
+            <plugin>
+                        
+                <artifactId>maven-clean-plugin</artifactId>
+                        
+                <version>3.1.0</version>
+                        
+                <extensions>true</extensions>
+                        
+                <configuration>
+                              
+                    <filesets>
+                                    
+                        <fileset>
+                                          
+                            <directory>${basedir}/CompositeApps</directory>
+                                        
+                        </fileset>
+                                  
+                    </filesets>
+                            
+                </configuration>
+                      
+            </plugin>
+                  
+            <plugin>
+                        
+                <artifactId>maven-dependency-plugin</artifactId>
+                        
+                <version>3.1.1</version>
+                        
+                <extensions>true</extensions>
+                        
+                <executions>
+                              
+                    <execution>
+                                    
+                        <id>copy-dependencies</id>
+                                    
+                        <phase>package</phase>
+                                    
+                        <goals>
+                                          
+                            <goal>copy-dependencies</goal>
+                                        
+                        </goals>
+                                    
+                        <configuration>
+                                          
+                            <outputDirectory>${project.build.directory}/../CompositeApps</outputDirectory>
+                                          
+                            <overWriteReleases>false</overWriteReleases>
+                                          
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                                          
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                                          
+                            <excludeTransitive>true</excludeTransitive>
+                                        
+                        </configuration>
+                                  
+                    </execution>
+                            
+                </executions>
+                        
+                <configuration/>
+                      
+            </plugin>
+                  
+            <plugin>
+                        
+                <groupId>org.wso2.maven</groupId>
+                        
+                <artifactId>mi-container-config-mapper</artifactId>
+                        
+                <version>5.2.35</version>
+                        
+                <extensions>true</extensions>
+                        
+                <executions>
+                              
+                    <execution>
+                                    
+                        <id>config-mapper-parser</id>
+                                    
+                        <phase>generate-resources</phase>
+                                    
+                        <goals>
+                                          
+                            <goal>config-mapper-parser</goal>
+                                        
+                        </goals>
+                                    
+                        <configuration>
+                                          
+                            <miVersion>4.2.0</miVersion>
+                                          
+                            <executeCipherTool>${ciphertool.enable}</executeCipherTool>
+                                          
+                            <keystoreName>${keystore.name}</keystoreName>
+                                          
+                            <keystoreAlias>${keystore.alias}</keystoreAlias>
+                                          
+                            <keystoreType>${keystore.type}</keystoreType>
+                                          
+                            <keystorePassword>${keystore.password}</keystorePassword>
+                                          
+                            <projectLocation>${project.basedir}</projectLocation>
+                                        
+                        </configuration>
+                                  
+                    </execution>
+                            
+                </executions>
+                        
+                <configuration/>
+                      
+            </plugin>
+                  
+            <plugin>
+                        
+                <artifactId>maven-antrun-plugin</artifactId>
+                        
+                <version>3.0.0</version>
+                        
+                <extensions>true</extensions>
+                        
+                <executions>
+                              
+                    <execution>
+                                    
+                        <id>antrun-edit</id>
+                                    
+                        <phase>process-resources</phase>
+                                    
+                        <goals>
+                                          
+                            <goal>run</goal>
+                                        
+                        </goals>
+                                    
+                        <configuration>
+                                          
+                            <target>
+                                                
+                                <move todir="${basedir}/CarbonHome/metadata">
+                                                      
+                                    <fileset dir="${basedir}/CarbonHome/.metadata"/>
+                                                    
+                                </move>
+                                                
+                                <replace file="${basedir}/Dockerfile">
+                                                      
+                                    <replacefilter token="CarbonHome/.metadata/metadata_config.properties" value="CarbonHome/metadata/metadata_config.properties"/>
+                                                      
+                                    <replacefilter token="CarbonHome/.metadata/references.properties" value="CarbonHome/metadata/references.properties"/>
+                                                    
+                                </replace>
+                                              
+                            </target>
+                                        
+                        </configuration>
+                                  
+                    </execution>
+                            
+                </executions>
+                        
+                <configuration/>
+                      
+            </plugin>
+                  
+            <plugin>
+                        
+                <groupId>io.fabric8</groupId>
+                        
+                <artifactId>docker-maven-plugin</artifactId>
+                        
+                <version>0.43.4</version>
+                        
+                <extensions>true</extensions>
+                        
+                <executions>
+                              
+                    <execution>
+                                    
+                        <id>docker-build</id>
+                                    
+                        <phase>package</phase>
+                                    
+                        <goals>
+                                          
+                            <goal>build</goal>
+                                        
+                        </goals>
+                                    
+                        <configuration>
+                                          
+                            <images>
+                                                
+                                <image>
+                                                      
+                                    <name>${dockerfile.repository}:${dockerfile.tag}</name>
+                                                      
+                                    <build>
+                                                            
+                                        <from>${dockerfile.base.image}</from>
+                                                            
+                                        <dockerFile>${basedir}/Dockerfile</dockerFile>
+                                                            
+                                        <args>
+                                                                  
+                                            <BASE_IMAGE>${dockerfile.base.image}</BASE_IMAGE>
+                                                                
+                                        </args>
+                                                          
+                                    </build>
+                                                    
+                                </image>
+                                              
+                            </images>
+                                          
+                            <authConfig>
+                                                
+                                <username>${dockerfile.pull.username}</username>
+                                                
+                                <password>${dockerfile.pull.password}</password>
+                                              
+                            </authConfig>
+                                          
+                            <verbose>true</verbose>
+                                        
+                        </configuration>
+                                  
+                    </execution>
+                              
+                    <execution>
+                                    
+                        <id>docker-push</id>
+                                    
+                        <phase>package</phase>
+                                    
+                        <goals>
+                                          
+                            <goal>push</goal>
+                                        
+                        </goals>
+                                    
+                        <configuration>
+                                          
+                            <images>
+                                                
+                                <image>
+                                                      
+                                    <name>${dockerfile.repository}:${dockerfile.tag}</name>
+                                                    
+                                </image>
+                                              
+                            </images>
+                                          
+                            <authConfig>
+                                                
+                                <username>${dockerfile.push.username}</username>
+                                                
+                                <password>${dockerfile.push.password}</password>
+                                              
+                            </authConfig>
+                                          
+                            <skip>${dockerfile.skipPush}</skip>
+                                        
+                        </configuration>
+                                  
+                    </execution>
+                            
+                </executions>
+                        
+                <configuration/>
+                      
+            </plugin>
+                
+        </plugins>
+          
+    </build>
+    
+</project>
